@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-06-03T15:19:51.398Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="WUl2tIK_88QFqYL6aunR" version="24.4.10" type="device">
+<mxfile host="app.diagrams.net" modified="2024-06-03T15:21:42.893Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="z28OfV2zaVJCDnlp-jdH" version="24.4.10" type="device">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1050" dy="1699" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -110,7 +110,7 @@
           <mxGeometry y="258" width="340" height="26" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-31" value="Užsakymas" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry y="-530" width="370" height="424" as="geometry">
+          <mxGeometry y="-530" width="370" height="450" as="geometry">
             <mxRectangle x="550" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -153,14 +153,17 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-38" value="Sukurti užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="320" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="lG9l3AgN7c1VvWPnp3Uq-0" value="Pašalinti užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-29" value="Gauti informacija apie Uzsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-31">
           <mxGeometry y="346" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="1IQxqNerof1kyZeijVb4-85" value="Redaguoti užsakymo Busena" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
+        <mxCell id="lG9l3AgN7c1VvWPnp3Uq-0" value="Pašalinti užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="372" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-17" value="Keisti Komercijos Vadybininka" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-31">
+        <mxCell id="1IQxqNerof1kyZeijVb4-85" value="Redaguoti užsakymo Busena" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="398" width="370" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-17" value="Keisti Komercijos Vadybininka" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-31">
+          <mxGeometry y="424" width="370" height="26" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-40" value="Automobilis" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="670" y="-530" width="250" height="398" as="geometry">
