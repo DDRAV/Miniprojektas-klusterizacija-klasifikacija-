@@ -9,15 +9,13 @@ class Darbuotojas:
         self.id = id
 
     def gauti_informacija(self):
-        return {
-            "Vardas": self.vardas,
-            "Pavarde": self.pavarde,
-            "Asmens_kodas": self.asmens_kodas,
-            "Telefono_numeris": self.telefono_numeris,
-            "Elektroninis_pastas": self.elektroninis_pastas,
-            "Alga": self.alga,
-            "ID": self.id
-        }
+        print(f"Vardas: {self.vardas}\n"
+            f"Pavarde: {self.pavarde}\n"
+            f"Asmens_kodas: {self.asmens_kodas}\n"
+            f"Telefono_numeris: {self.telefono_numeris}\n"
+            f"Elektroninis_pastas: {self.elektroninis_pastas}\n"
+            f"Alga: {self.alga}\n"
+            f"ID: {self.id}\n")
 
     def keisti_informacija(self, vardas=None, pavarde=None, telefono_numeris=None, elektroninis_pastas=None, alga=None):
         if vardas:

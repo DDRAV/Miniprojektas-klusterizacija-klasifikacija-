@@ -13,7 +13,7 @@ class Automobilis:
         self.atsakingas_tv = atsakingas_tv
 
     def gauti_informacija_apie_automobili(self) -> str:
-        return (f"Automobilio numeris: {self.automobilio_numeris}\n"
+        print(f"Automobilio numeris: {self.automobilio_numeris}\n"
                 f"Automobilio komplektacija: {self.automobilio_komplektacija}\n"
                 f"Priekabos numeris: {self.priekabos_numeris}\n"
                 f"Priekabos tipas: {self.priekabos_tipas}\n"

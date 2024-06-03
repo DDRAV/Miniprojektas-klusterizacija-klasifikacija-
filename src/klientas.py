@@ -1,8 +1,5 @@
 from komercijosvadybininkas import KomercijosVadybininkas
-
-
-class Uzsakymas:
-    pass
+from uzsakymas import Uzsakymas
 
 
 class Klientas:
@@ -15,22 +12,22 @@ class Klientas:
         self.kliento_uzsakymai = []
         self.komercijos_vadybininkas = komercijos_vadybininkas
 
-    def get_all_information(self) -> str:
-        return (f"Klientas: {self.pavadinimas}\n"
+    def get_all_information(self):
+        print(f"Klientas: {self.pavadinimas}\n"
                 f"Kontaktinis numeris: {self.kontaktinis_numeris}\n"
                 f"Elektroninis paštas: {self.elektroninis_pastas}\n"
                 f"Kliento ID: {self.klientas_id}\n"
                 f"Komercijos vadybininkas: {self.komercijos_vadybininkas}\n"
                 f"Užsakymų kiekis: {len(self.kliento_uzsakymai)}")
 
-    def get_order_information(self) -> str:
+    def get_order_information(self):
         if not self.kliento_uzsakymai:
             return "Klientas neturi užsakymų"
 
         uzsakymai_info = "Kliento užsakymų sąrašas:\n"
         for indeksas, uzsakymas in enumerate(self.kliento_uzsakymai, start=1):
             uzsakymai_info += f"Užsakymas {indeksas}: ID {uzsakymas.id}\n"
-        return uzsakymai_info
+        print(uzsakymai_info)
 
     def add_uzsakymas(self, uzsakymas: Uzsakymas):
         self.kliento_uzsakymai.append(uzsakymas)
