@@ -7,7 +7,7 @@ class Darbuotojas:
         self.elektroninis_pastas = elektroninis_pastas
         self.alga = alga
 
-    def gauti_bendra_informacija(self):
+    def gauti_informacija(self):
         return {
             "Vardas": self.vardas,
             "Pavarde": self.pavarde,
@@ -17,7 +17,7 @@ class Darbuotojas:
             "Alga": self.alga
         }
 
-    def keisti_bendra_informacija(self, vardas=None, pavarde=None, telefono_numeris=None, elektroninis_pastas=None, alga=None):
+    def keisti_informacija(self, vardas=None, pavarde=None, telefono_numeris=None, elektroninis_pastas=None, alga=None):
         if vardas:
             self.vardas = vardas
         if pavarde:
