@@ -1,8 +1,8 @@
 from darbuotuojas import Darbuotojas
 
 class KomercijosVadybininkas(Darbuotojas):
-    def __init__(self, vardas, pavarde, asmens_kodas, telefono_numeris, elektroninis_pastas, alga):
-        super().__init__(vardas, pavarde, asmens_kodas, telefono_numeris, elektroninis_pastas, alga)
+    def __init__(self, vardas, pavarde, asmens_kodas, telefono_numeris, elektroninis_pastas, alga, id):
+        super().__init__(vardas, pavarde, asmens_kodas, telefono_numeris, elektroninis_pastas, alga, id)
         self.aptarnaujami_klientai = []
         self.uzsakymai = []
 

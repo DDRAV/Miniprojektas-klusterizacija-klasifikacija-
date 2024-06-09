@@ -1,6 +1,4 @@
 from komercijosvadybininkas import KomercijosVadybininkas
-from uzsakymas import Uzsakymas
-
 
 class Klientas:
     def __init__(self, pavadinimas: str, kontaktinis_numeris: str, elektroninis_pastas: str, klientas_id: int,
@@ -26,8 +24,8 @@ class Klientas:
 
         uzsakymai_info = "Kliento užsakymų sąrašas:\n"
         for indeksas, uzsakymas in enumerate(self.kliento_uzsakymai, start=1):
-            uzsakymai_info += f"Užsakymas {indeksas}: ID {uzsakymas.id}\n"
+            uzsakymai_info += f"Užsakymas {indeksas}: ID {uzsakymas.uzsakymo_id}\n"
         print(uzsakymai_info)
 
-    def add_uzsakymas(self, uzsakymas: Uzsakymas):
+    def add_uzsakymas(self, uzsakymas):
         self.kliento_uzsakymai.append(uzsakymas)

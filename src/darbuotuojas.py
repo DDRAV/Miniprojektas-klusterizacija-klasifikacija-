@@ -1,5 +1,5 @@
 class Darbuotojas:
-    def __init__(self, vardas: str, pavarde: str, asmens_kodas: int, telefono_numeris: str, elektroninis_pastas: str, alga: str, id: str):
+    def __init__(self, vardas: str, pavarde: str, asmens_kodas: int, telefono_numeris: str, elektroninis_pastas: str, alga: int, id: str):
         self.vardas = vardas
         self.pavarde = pavarde
         self.asmens_kodas = asmens_kodas

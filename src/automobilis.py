@@ -12,7 +12,7 @@ class Automobilis:
         self.automobilio_busena = automobilio_busena
         self.atsakingas_tv = atsakingas_tv
 
-    def gauti_informacija_apie_automobili(self) -> str:
+    def gauti_informacija_apie_automobili(self):
         print(f"Automobilio numeris: {self.automobilio_numeris}\n"
                 f"Automobilio komplektacija: {self.automobilio_komplektacija}\n"
                 f"Priekabos numeris: {self.priekabos_numeris}\n"
@@ -22,7 +22,7 @@ class Automobilis:
                 f"Automobilio būsenа: {self.automobilio_busena}\n"
                 f"Atsakingas TV: {self.atsakingas_tv}")
 
-    def keisti_atsakinga_tv(self, naujas_tv: TransportoVadybininkas):
+    def keisti_atsakinga_tv(self, naujas_tv):
         self.atsakingas_tv = naujas_tv
 
     def keisti_automobilio_komplektacija(self, nauja_komplektacija: str):
