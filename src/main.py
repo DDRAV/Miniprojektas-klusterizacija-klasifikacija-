@@ -33,7 +33,7 @@ uzsakymas1 = Uzsakymas(uzsakymo_id=1,pakrovimo_data="2024.05.20",
 
 # Priskiriam uzsakyma prie kliento
 
-klientas.add_uzsakymas(uzsakymas1)
+klientas.prideti_uzsakyma(uzsakymas1)
 
 # Komercijos vadybininkas priskiria klientą
 komercijos_vadybininkas.priskirti_klienta(klientas)
@@ -54,9 +54,23 @@ komercijos_vadybininkas.perziureti_klientus()
 print("\nInformacija apie transporto vadybininką ir jo automobilius:")
 automobilis.gauti_informacija_apie_automobili()
 
+
+Uzsakymas.prideti_uzsakyma(
+    uzsakymo_id=1,
+    pakrovimo_data="2024-06-10",
+    atstumas=100.0,
+    iskrovimo_data="2024-06-11",
+    pervezimo_kaina=500.0,
+    automobilio_komplektacija="Standartine",
+    priekabos_tipas="Saldytuvas",
+    klientas=klientas,
+    komercijos_vadybininkas=komercijos_vadybininkas,
+    uzsakymo_busena="Pending"
+)
+
 print("\nInformacija apie klientą ir jo užsakymus:")
-klientas.get_all_information()
-klientas.get_order_information()
+klientas.bendra_info()
+klientas.uzsakymu_info()
 
 # Pakeitimai
 print("\nAtliekami pakeitimai:")

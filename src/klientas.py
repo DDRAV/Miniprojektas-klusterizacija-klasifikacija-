@@ -10,7 +10,7 @@ class Klientas:
         self.kliento_uzsakymai = []
         self.komercijos_vadybininkas = komercijos_vadybininkas
 
-    def get_all_information(self):
+    def bendra_info(self):
         print(f"Klientas: {self.pavadinimas}\n"
                 f"Kontaktinis numeris: {self.kontaktinis_numeris}\n"
                 f"Elektroninis paštas: {self.elektroninis_pastas}\n"
@@ -18,7 +18,7 @@ class Klientas:
                 f"Komercijos vadybininkas: {self.komercijos_vadybininkas}\n"
                 f"Užsakymų kiekis: {len(self.kliento_uzsakymai)}")
 
-    def get_order_information(self):
+    def uzsakymu_info(self):
         if not self.kliento_uzsakymai:
             return "Klientas neturi užsakymų"
 
@@ -27,5 +27,5 @@ class Klientas:
             uzsakymai_info += f"Užsakymas {indeksas}: ID {uzsakymas.uzsakymo_id}\n"
         print(uzsakymai_info)
 
-    def add_uzsakymas(self, uzsakymas):
+    def prideti_uzsakyma(self, uzsakymas):
         self.kliento_uzsakymai.append(uzsakymas)

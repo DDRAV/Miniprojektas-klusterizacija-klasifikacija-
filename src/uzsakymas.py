@@ -2,6 +2,7 @@ from komercijosvadybininkas import KomercijosVadybininkas
 from klientas import Klientas
 
 class Uzsakymas:
+    uzsakymai = []
     def __init__(self, uzsakymo_id: int, pakrovimo_data: str, atstumas: float, iskrovimo_data: str, pervezimo_kaina: float, automobilio_komplektacija: str, priekabos_tipas: str, klientas: Klientas, komercijos_vadybininkas: KomercijosVadybininkas, uzsakymo_busena: str):
         self.uzsakymo_id = uzsakymo_id
         self.pakrovimo_data = pakrovimo_data
@@ -14,6 +15,16 @@ class Uzsakymas:
         self.komercijos_vadybininkas = komercijos_vadybininkas
         self.uzsakymo_busena = uzsakymo_busena
 
+
+    @classmethod
+    def prideti_uzsakyma(cls, uzsakymo_id, pakrovimo_data, atstumas, iskrovimo_data, pervezimo_kaina, automobilio_komplektacija,
+                      priekabos_tipas, klientas, komercijos_vadybininkas, uzsakymo_busena):
+        new_order = cls(uzsakymo_id, pakrovimo_data, atstumas, iskrovimo_data, pervezimo_kaina, automobilio_komplektacija,
+                        priekabos_tipas, klientas, komercijos_vadybininkas, uzsakymo_busena)
+        cls.uzsakymai.append(new_order)
+        klientas.prideti_uzsakyma(new_order)
+        komercijos_vadybininkas.prideti_uzsakyma_kv(new_order)
+        print(f"Naujas užsakymas pridėtas: {new_order.uzsakymo_id}")
 
     def gauti_informacija_apie_uzsakyma(self):
         print(f"Užsakymo ID: {self.uzsakymo_id}\n"
@@ -32,5 +43,7 @@ class Uzsakymas:
         print(f"Užsakymo {self.uzsakymo_id} būsena pakeista į {nauja_busena}.")
 
     def keisti_komercijos_vadybininka(self, naujas_vadybininkas):
+        self.komercijos_vadybininkas.uzsakymai.remove(self)
         self.komercijos_vadybininkas = naujas_vadybininkas
+        naujas_vadybininkas.prideti_uzsakyma(self)
         print(f"Užsakymo {self.uzsakymo_id} komercijos vadybininkas pakeistas į {naujas_vadybininkas.vardas}.")

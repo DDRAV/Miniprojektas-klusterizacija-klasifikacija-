@@ -17,3 +17,7 @@ class KomercijosVadybininkas(Darbuotojas):
 
     def perziureti_uzsakymus(self):
         print(f"Vadybininkas {self.vardas} {self.pavarde} priziuri {self.uzsakymai} uzsakymus")
+
+    def prideti_uzsakyma_kv(self, uzsakymas):
+        self.uzsakymai.append(uzsakymas)
+        print(f"Užsakymas pridėtas komercijos vadybininkui {self.vardas}: {uzsakymas.uzsakymo_id}")
