@@ -11,6 +11,11 @@ class Automobilis:
         self.vygdomas_uzsakymas = vygdomas_uzsakymas
         self.automobilio_busena = automobilio_busena
         self.atsakingas_tv = atsakingas_tv
+        atsakingas_tv.priskirti_automobili(self)
+
+
+    def __repr__(self):
+        return f"Automobilis({self.automobilio_numeris}, {self.priekabos_numeris}, {self.priekabos_tipas}, {self.vairuotojo_kontaktinis_tel}, {self.atsakingas_tv})"
 
     def gauti_informacija_apie_automobili(self):
         print(f"Automobilio numeris: {self.automobilio_numeris}\n"
@@ -23,7 +28,11 @@ class Automobilis:
                 f"Atsakingas TV: {self.atsakingas_tv}")
 
     def keisti_atsakinga_tv(self, naujas_tv):
+        if self.atsakingas_tv:
+            self.atsakingas_tv.atimti_automobili(self)
         self.atsakingas_tv = naujas_tv
+        naujas_tv.priskirti_automobili(self)
+        print(f"Automobilio {self.automobilio_numeris} atsakingas vadybininkas pakeistas į {naujas_tv.vardas}.")
 
     def keisti_automobilio_komplektacija(self, nauja_komplektacija: str):
         self.automobilio_komplektacija = nauja_komplektacija

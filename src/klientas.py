@@ -10,6 +10,9 @@ class Klientas:
         self.kliento_uzsakymai = []
         self.komercijos_vadybininkas = komercijos_vadybininkas
 
+    def __repr__(self):
+        return f"Klientas({self.pavadinimas}, {self.kontaktinis_numeris}, {self.elektroninis_pastas}, {self.klientas_id})"
+
     def bendra_info(self):
         print(f"Klientas: {self.pavadinimas}\n"
                 f"Kontaktinis numeris: {self.kontaktinis_numeris}\n"

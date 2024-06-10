@@ -4,7 +4,6 @@ from komercijosvadybininkas import KomercijosVadybininkas
 from transportovadybininkas import TransportoVadybininkas
 from uzsakymas import Uzsakymas
 
-uzsakymai = []
 komercijos_vadybininkas = KomercijosVadybininkas(
     vardas="Jonas", pavarde="Jonaitis", asmens_kodas=12345678901,
     telefono_numeris="+37060012345", elektroninis_pastas="jonas@example.com", alga=1500, id= "KV1"

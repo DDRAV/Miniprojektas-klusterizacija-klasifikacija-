@@ -8,6 +8,9 @@ class Darbuotojas:
         self.alga = alga
         self.id = id
 
+    def __repr__(self):
+        return f"Darbuotuojas ({self.vardas}, {self.pavarde}, {self.elektroninis_pastas}, {self.id}, {self.alga})"
+
     def gauti_informacija(self):
         print(f"Vardas: {self.vardas}\n"
             f"Pavarde: {self.pavarde}\n"

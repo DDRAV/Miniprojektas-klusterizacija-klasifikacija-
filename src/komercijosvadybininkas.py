@@ -6,6 +6,9 @@ class KomercijosVadybininkas(Darbuotojas):
         self.aptarnaujami_klientai = []
         self.uzsakymai = []
 
+    def __repr__(self):
+        return f"Komercijos Vadybyninkas({self.vardas}, {self.pavarde}, {self.elektroninis_pastas}, {self.id})"
+
     def perziureti_klientus(self):
         print(f"Vadybininkas {self.vardas} {self.pavarde} aptarnauja {self.aptarnaujami_klientai} klientus")
 

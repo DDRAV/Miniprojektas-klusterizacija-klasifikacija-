@@ -14,6 +14,8 @@ class Uzsakymas:
         self.klientas = klientas
         self.komercijos_vadybininkas = komercijos_vadybininkas
         self.uzsakymo_busena = uzsakymo_busena
+        klientas.prideti_uzsakyma(self)
+        komercijos_vadybininkas.prideti_uzsakyma_kv(self)
 
 
     @classmethod
@@ -25,6 +27,9 @@ class Uzsakymas:
         klientas.prideti_uzsakyma(new_order)
         komercijos_vadybininkas.prideti_uzsakyma_kv(new_order)
         print(f"Naujas užsakymas pridėtas: {new_order.uzsakymo_id}")
+
+    def __repr__(self):
+        return f"Uzsakymas({self.uzsakymo_id}, {self.klientas}, {self.komercijos_vadybininkas}, {self.uzsakymo_busena})"
 
     def gauti_informacija_apie_uzsakyma(self):
         print(f"Užsakymo ID: {self.uzsakymo_id}\n"
