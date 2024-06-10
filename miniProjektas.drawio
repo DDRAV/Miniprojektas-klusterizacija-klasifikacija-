@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-06-03T16:52:04.626Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="SVoHzWpQoWEZFY6zKigL" version="24.4.10" type="device">
+<mxfile host="app.diagrams.net" modified="2024-06-10T14:27:23.553Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="2GcDf42PNnNZIL6Pzxz_" version="24.4.13" type="device">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1502" dy="1733" grid="1" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1290" dy="1699" grid="1" gridSize="10" guides="0" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -30,7 +30,7 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-75" value="Elektroninis paštas" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
           <mxGeometry y="130" width="160" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-31" value="Alga" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="zkfFHV4jXpPFQw0GAbJ--0">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-31" value="Alga" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
           <mxGeometry y="156" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--4" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
@@ -62,10 +62,10 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-76" value="Priskitri nauja Automobili" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="zkfFHV4jXpPFQw0GAbJ--6" vertex="1">
           <mxGeometry y="86" width="310" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-27" value="Atimti nauja Automobili" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="zkfFHV4jXpPFQw0GAbJ--6">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-27" value="Atimti nauja Automobili" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="zkfFHV4jXpPFQw0GAbJ--6" vertex="1">
           <mxGeometry y="112" width="310" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--13" target="1IQxqNerof1kyZeijVb4-31">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--13" target="1IQxqNerof1kyZeijVb4-31" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--13" value="Komercijos Vadybininkas (KV)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -88,14 +88,14 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-77" value="Priskiri nauja klienta " style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--13" vertex="1">
           <mxGeometry y="116" width="340" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-26" value="Atimti nauja klienta" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="zkfFHV4jXpPFQw0GAbJ--13">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-26" value="Atimti nauja klienta" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--13" vertex="1">
           <mxGeometry y="144" width="340" height="28" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-30" value="Perziureti vadybyninko priziurimus uzsakymus" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--13" vertex="1">
           <mxGeometry y="172" width="340" height="26" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-31" value="Užsakymas" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry y="-650" width="370" height="450" as="geometry">
+          <mxGeometry y="-650" width="370" height="410" as="geometry">
             <mxRectangle x="550" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -135,20 +135,14 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-37" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="312" width="370" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="1IQxqNerof1kyZeijVb4-38" value="Sukurti užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-29" value="Gauti informacija apie Uzsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="320" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-29" value="Gauti informacija apie Uzsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-31">
+        <mxCell id="1IQxqNerof1kyZeijVb4-85" value="Redaguoti užsakymo Busena" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="346" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="lG9l3AgN7c1VvWPnp3Uq-0" value="Pašalinti užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-17" value="Keisti Komercijos Vadybininka" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
           <mxGeometry y="372" width="370" height="26" as="geometry" />
-        </mxCell>
-        <mxCell id="1IQxqNerof1kyZeijVb4-85" value="Redaguoti užsakymo Busena" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-31" vertex="1">
-          <mxGeometry y="398" width="370" height="26" as="geometry" />
-        </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-17" value="Keisti Komercijos Vadybininka" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-31">
-          <mxGeometry y="424" width="370" height="26" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-40" value="Automobilis" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="660" y="-660" width="250" height="398" as="geometry">
@@ -188,25 +182,25 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-86" value="Keisti Atsakinga TV" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-40" vertex="1">
           <mxGeometry y="268" width="250" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-19" value="Keisti Autmobilio komplektacija" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-40">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-19" value="Keisti Autmobilio komplektacija" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-40" vertex="1">
           <mxGeometry y="294" width="250" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-20" value="Keisti Priekabos numeri" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-40">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-20" value="Keisti Priekabos numeri" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-40" vertex="1">
           <mxGeometry y="320" width="250" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-21" value="Keisti Priekabos tipa" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="1IQxqNerof1kyZeijVb4-40">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-21" value="Keisti Priekabos tipa" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-40" vertex="1">
           <mxGeometry y="346" width="250" height="26" as="geometry" />
         </mxCell>
         <mxCell id="1IQxqNerof1kyZeijVb4-48" value="Priskirti nauja užsakyma" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="1IQxqNerof1kyZeijVb4-40" vertex="1">
           <mxGeometry y="372" width="250" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--13" target="zkfFHV4jXpPFQw0GAbJ--17">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--13" target="zkfFHV4jXpPFQw0GAbJ--17" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="190" y="-640" as="sourcePoint" />
             <mxPoint x="435" y="-380" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--17" target="1IQxqNerof1kyZeijVb4-35">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--17" target="1IQxqNerof1kyZeijVb4-35" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--17" value="Klientas" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -241,7 +235,7 @@
         <mxCell id="1IQxqNerof1kyZeijVb4-51" value="Perziureti gautus užsakymus iš kliento" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--17" vertex="1">
           <mxGeometry y="216" width="220" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="R33RQH4Gj8EaOs6QEGmN-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="1IQxqNerof1kyZeijVb4-74" target="1IQxqNerof1kyZeijVb4-73">
+        <mxCell id="R33RQH4Gj8EaOs6QEGmN-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="1IQxqNerof1kyZeijVb4-74" target="1IQxqNerof1kyZeijVb4-73" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
