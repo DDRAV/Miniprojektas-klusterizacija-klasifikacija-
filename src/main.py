@@ -80,3 +80,11 @@ automobilis.keisti_atsakinga_tv(transporto_vadybininkas2)
 
 print("\nAtnaujinta informacija apie automobilį:")
 automobilis.gauti_informacija_apie_automobili()
+
+
+if __name__ == "__main__":
+    conn = db_engine.connect_db()
+    if conn:
+        # Perform your database operations here
+        pass
+    db_engine.close_db(conn)
