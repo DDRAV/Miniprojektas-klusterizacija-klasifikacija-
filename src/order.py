@@ -1,8 +1,7 @@
-from komercijosvadybininkas import KomercijosVadybininkas
-from klientas import Klientas
+from warehouse import Warehouse
 
-class Uzsakymas:
-    uzsakymai = []
+class Order:
+    orders = []
     def __init__(self, uzsakymo_id: int, pakrovimo_data: str, atstumas: float, iskrovimo_data: str, pervezimo_kaina: float, automobilio_komplektacija: str, priekabos_tipas: str, klientas: Klientas, komercijos_vadybininkas: KomercijosVadybininkas, uzsakymo_busena: str):
         self.uzsakymo_id = uzsakymo_id
         self.pakrovimo_data = pakrovimo_data

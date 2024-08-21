@@ -1,8 +1,8 @@
 from automobilis import Automobilis
-from klientas import Klientas
+from client import Client
 from komercijosvadybininkas import KomercijosVadybininkas
 from transportovadybininkas import TransportoVadybininkas
-from uzsakymas import Uzsakymas
+from order import Uzsakymas
 
 komercijos_vadybininkas = KomercijosVadybininkas(
     vardas="Jonas", pavarde="Jonaitis", asmens_kodas=12345678901,

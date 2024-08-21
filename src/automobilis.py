@@ -1,5 +1,5 @@
 from transportovadybininkas import TransportoVadybininkas
-from uzsakymas import Uzsakymas
+from order import Uzsakymas
 
 class Automobilis:
     def __init__(self, automobilio_numeris: str, automobilio_komplektacija: str, priekabos_numeris: str, priekabos_tipas: str, vairuotojo_kontaktinis_tel: str, vygdomas_uzsakymas: Uzsakymas, automobilio_busena: str, atsakingas_tv: TransportoVadybininkas):
@@ -45,3 +45,5 @@ class Automobilis:
 
     def priskirti_nauja_uzsakyma(self, naujas_uzsakymas: Uzsakymas):
         self.vygdomas_uzsakymas = naujas_uzsakymas
+
+
