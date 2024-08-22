@@ -23,4 +23,11 @@ class Carrier(Client):
         print(f"Carrier {self.__repr__()} has carried orders below:\n"
               f"{self.assembled_orders}")
 
-    
+
+    def remove_order(self, order):
+        if order in self.assembled_orders:
+            self.assembled_orders.remove(order)
+            print (f"Order {order} removed from carrier {self.__repr__()}")
+        else:
+            print(f"Order {order} wasn't carried by carrier {self.__repr__()}")
+
