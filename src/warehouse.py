@@ -1,3 +1,5 @@
+from customer import Customer
+
 class Warehouse:
     def __init__(self, wh_id: int, name: str, customer: Customer, country: str, postal_code: str, adress: str, working_hours: int, type: str):
         self.wh_id = wh_id

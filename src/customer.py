@@ -25,7 +25,7 @@ class Customer(Client):
 
 
     def show_customer_orders(self):
-        print(f"Customer {self.__repr__()} is managing orders:\n"
+        print(f"Customer {self.__repr__()} has done orders below:\n"
               f"{self.customer_orders}")
 
     def add_warehouse(self, warehouse):
