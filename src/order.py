@@ -16,14 +16,14 @@ class Order:
         manager.add_order(self)
         self.customer = customer
         customer.add_order(self)
-        self.assembled_carrier = assembled_carrier
+        self.assembled_carrier = None
 
 
     @classmethod
     def prideti_uzsakyma(cls, order_id, price, loading_wh, loading_time, unloading_wh, unloading_time,
                       manager, customer, assembled_carrier):
         new_order = cls(order_id, price, loading_wh, loading_time, unloading_wh, unloading_time,
-                      manager, customer, assembled_carrier)
+                      manager, customer,assembled_carrier)
         cls.orders.append(new_order)
         manager.add_order(new_order)
         customer.add_order(new_order)
@@ -44,7 +44,11 @@ class Order:
                 f"Assembled carrier: {self.assembled_carrier}\n")
 
     def change_carrier(self, new_carrier):
-        self.assembled_carrier.remove_order(self)
-        self.assembled_carrier = new_carrier
-        new_carrier.add_order(self)
-        print(f"Order {self.order_id} carrier changed to {new_carrier}.")
+        if self.assembled_carrier is None:
+            self.assembled_carrier = new_carrier
+            print(f"Order {self.order_id} carrier {new_carrier} has been assigned.")
+        else:
+            self.assembled_carrier.remove_order(self)
+            self.assembled_carrier = new_carrier
+            new_carrier.add_order(self)
+            print(f"Order {self.order_id} carrier changed to {new_carrier}.")
