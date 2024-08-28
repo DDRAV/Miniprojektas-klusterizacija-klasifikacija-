@@ -61,7 +61,7 @@ class KomercijosVadybininkas(Darbuotojas):
         print(f"Užsakymas pridėtas komercijos vadybininkui {self.vardas}: {uzsakymas.uzsakymo_id}")
 
 
-from transportovadybininkas import TransportoVadybininkas
+from test.transportovadybininkas import TransportoVadybininkas
 from order import Uzsakymas
 
 class Automobilis:
@@ -110,7 +110,7 @@ class Automobilis:
         self.vygdomas_uzsakymas = naujas_uzsakymas
 
 
-from komercijosvadybininkas import KomercijosVadybininkas
+from test.komercijosvadybininkas import KomercijosVadybininkas
 from client import Klientas
 
 class Uzsakymas:

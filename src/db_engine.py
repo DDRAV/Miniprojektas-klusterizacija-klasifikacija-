@@ -69,6 +69,17 @@ class DBEngine:
 if __name__ == "__main__":
     db = DBEngine()
     if db.connection:
-        result = db.execute_sql("SELECT * FROM some_table")  # Example query
-        print(result)
-        db.disconnect()
+        result = db.execute_sql(
+            "INSERT INTO orders (price, loading_warehouse, loading_time, unloading_warehouse, unloading_time, manager_id, customer_id, carrier_id) VALUES"
+            "('1200', 82, '08:00:00', 83, '17:00:00', '1', '101', '2'),"
+            "('850', 84, '09:00:00', 85, '18:00:00', '2', '102', '3'),"
+            "('950', 86, '08:30:00', 87, '16:30:00', '3', '103', '5'),"
+            "('1100', 88, '10:00:00', 89, '15:00:00', '4', '104', '7'),"
+            "('1300', 90, '07:00:00', 91, '19:00:00', '5', '105', '8'),"
+            "('980', 92, '09:00:00', 93, '14:00:00', '6', '106', '10'),"
+            "('1075', 94, '08:30:00', 95, '16:00:00', '7', '107', '12'),"
+            "('1150', 96, '10:00:00', 97, '17:00:00', '8', '108', '14'),"
+            "('1020', 98, '08:00:00', 99, '15:00:00', '9', '109', '16'),"
+            "('1230', 100, '07:00:00', 101, '18:00:00', '10', '110', '18');"
+) # Example query
+        print(f"Command executed")

@@ -1,4 +1,4 @@
-from transportovadybininkas import TransportoVadybininkas
+from test.transportovadybininkas import TransportoVadybininkas
 from order import Uzsakymas
 
 class Automobilis:
