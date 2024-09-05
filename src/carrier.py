@@ -1,5 +1,5 @@
 from client import Client
-from order import Order
+
 
 class Carrier(Client):
     def __init__(self, client_id: int, name: str, email: str, phone_number: str, country_of_reg: str):
@@ -30,4 +30,3 @@ class Carrier(Client):
             print (f"Order {order} removed from carrier {self.__repr__()}")
         else:
             print(f"Order {order} wasn't carried by carrier {self.__repr__()}")
-

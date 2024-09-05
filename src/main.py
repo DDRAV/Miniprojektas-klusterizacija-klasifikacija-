@@ -1,7 +1,5 @@
-from db_engine import DBEngine
-from carrier import Carrier
-from customer import Customer
-from manager import Manager
-from order import Order
-from warehouse import Warehouse
+from data import load_data
 
+
+if __name__ == "__main__":
+    data = load_data()

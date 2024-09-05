@@ -1,6 +1,4 @@
-from customer import Customer
-from order import Order
-
+from db_engine import DBEngine
 class Manager:
     def __init__(self, manager_id: int, name: str, surname: str, date_of_birth: int, email: str, phone_number: int, salary: int):
         self.manager_id = manager_id
@@ -64,3 +62,4 @@ class Manager:
     def show_manager_orders(self):
         print(f"Manager {self.__repr__()} is managing orders:\n"
               f"{self.manager_orders}")
+
