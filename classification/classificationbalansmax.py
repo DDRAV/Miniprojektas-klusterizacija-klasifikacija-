@@ -107,9 +107,6 @@ datasets = {
     "Balanced 350": (X_train350, X_test350, Y_train350, Y_test350),
     "Final Dataset": (X_final_train, X_final_test, Y_final_train, Y_final_test)
 }
-
-
-
 # Modeliai
 models = {
     'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),
@@ -119,8 +116,14 @@ models = {
     'KNN': KNeighborsClassifier()
 }
 
+# Sukuriame vietas, kur saugosime rezultatus
+model_accuracies = {name: [] for name in models.keys()}
+confusion_matrices = {}
+feature_importances = {}
+
 for dataset_name, (X_tr, X_te, Y_tr, Y_te) in datasets.items():
     print(f"\nEvaluating models on {dataset_name} dataset:")
+
     # Skalizuojame kiekvieną duomenų rinkinį atskirai
     scaler = StandardScaler()
     X_tr = scaler.fit_transform(X_tr)
@@ -131,62 +134,49 @@ for dataset_name, (X_tr, X_te, Y_tr, Y_te) in datasets.items():
         model.fit(X_tr, Y_tr)  # Treniruojame modelį
         predictions = model.predict(X_te)  # Prognozuojame testavimo rinkinyje
         accuracy = accuracy_score(Y_te, predictions)  # Apskaičiuojame tikslumą
+        model_accuracies[name].append(accuracy)
         print(f'{name} on {dataset_name} '
               f'\nAccuracy: {accuracy:.2f}')
+        # Feature importance vizualizacija
+        if name == "Random Forest":
+            feature_importance_rf = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
+            feature_importances[dataset_name] = feature_importance_rf
 
-    # Darbas su geriausiu modeliu Random Forest
-    print(f"\nPerforming GridSearchCV on {dataset_name} dataset using Random Forest:")
-    param_grid = {
-        'n_estimators': [75, 100],
-        'max_depth': [15, 20],
-        'bootstrap': [True],
-        'criterion': ['gini', 'entropy']
-    }
-    grid_search = GridSearchCV(estimator=RandomForestClassifier(random_state=42), param_grid=param_grid,
-                               cv=5, n_jobs=-1, verbose=2, scoring='accuracy')
-    grid_search.fit(X_tr, Y_tr)
+        # Klasifikavimo matrica
+        Y_pred = model.predict(X_te)
+        cm = confusion_matrix(Y_te, Y_pred)
+        confusion_matrices[dataset_name] = cm
 
-    # Best estimator evaluation
-    best_rf = grid_search.best_estimator_
-    Y_pred = best_rf.predict(X_te)
-    accuracy = accuracy_score(Y_te, Y_pred)
 
-    print(f"Best parameters for {dataset_name}: {grid_search.best_params_}")
-    print(f"Accuracy on best parameters: {accuracy:.2f}")
+# 1. Modelių tikslumo grafikas
+plt.figure(figsize=(10, 6))
+for model, accuracies in model_accuracies.items():
+    plt.plot(list(datasets.keys()), accuracies, marker='o', label=model)
+plt.xlabel('Dataset')
+plt.ylabel('Accuracy')
+plt.title('Model Accuracy Comparison')
+plt.legend()
+plt.grid()
+plt.show()
 
-    # Feature importance vizualizacija
-    feature_importance_rf = pd.Series(best_rf.feature_importances_, index=X.columns).sort_values(ascending=False)
+# 2. Klasifikavimo matricų palyginimas
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+for ax, (dataset_name, cm) in zip(axes, confusion_matrices.items()):
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    ax.set_title(f'Confusion Matrix for {dataset_name}')
+    ax.set_xlabel('Predicted Labels')
+    ax.set_ylabel('True Labels')
+plt.tight_layout()
+plt.show()
+
+# 3. Feature importance palyginimas
+if feature_importances:  # Check if there are feature importances to plot
     plt.figure(figsize=(10, 10))
-    plt.barh(feature_importance_rf.index, feature_importance_rf.values)
-    plt.title(f"Feature Importance ({dataset_name} Random Forest)")
+    for dataset_name, importance in feature_importances.items():
+        plt.barh(importance.index, importance.values, label=dataset_name)
+    plt.title("Feature Importance Comparison")
+    plt.xlabel("Importance Score")
+    plt.legend()
     plt.gca().invert_yaxis()
     plt.tight_layout()
     plt.show()
-
-    # Confusion Matrix ir Classification Report
-    cm = confusion_matrix(Y_te, Y_pred)
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=best_rf.classes_, yticklabels=best_rf.classes_)
-    plt.xlabel("Predicted Labels")
-    plt.ylabel("True Labels")
-    plt.title(f"Confusion Matrix for {dataset_name} Best Random Forest Model")
-    plt.show()
-
-    print(f"Classification Report for {dataset_name}:\n", classification_report(Y_te, Y_pred))
-
-# model_accuracies = {
-#     'Logistic Regression': lr_accuracy,
-#     'Decision Tree': dt_accuracy,
-#     'Random Forest': rf_accuracy,
-#     'Naive Bayes': nb_accuracy,
-#     'KNN': knn_accuracy
-# }
-#
-# plt.figure(figsize=(10, 6))
-# plt.bar(model_accuracies.keys(), model_accuracies.values(), color='skyblue')
-# plt.xlabel("Model")
-# plt.ylabel("Accuracy")
-# plt.title("Accuracy of Different Models")
-# plt.show()
-
-
