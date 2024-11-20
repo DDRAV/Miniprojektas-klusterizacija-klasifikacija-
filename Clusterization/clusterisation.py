@@ -14,9 +14,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_distances
 from sklearn.decomposition import PCA
-from sklearn_extra.cluster import dunn_score
+from sklearn.cluster import dunn_score
 
-path = "C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
+
+path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
 
 #1. Get dataset
 
