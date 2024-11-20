@@ -14,7 +14,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_distances
 from sklearn.decomposition import PCA
-from sklearn.cluster import dunn_score
+from sklearn_extra.cluster import dunn_score
 
 
 path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
@@ -137,8 +137,11 @@ plt.title("WCSS depending on cluster count")
 plt.show()
 
 # Choosing best cluster count based on wcss
-optimal_k = 4  # Choose based on graph
-kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+optimal_kmeans = 6  # Choose based on graph
+#4 clusters:
+#Silhouette Score: 0.23571996908972387
+#Davies-Bouldin Index: 1.4448610625416118
+kmeans = KMeans(n_clusters=optimal_kmeans, random_state=42)
 res_kmeans = kmeans.fit_predict(data_scaled)
 
 # Evaluate using metrics
