@@ -1,11 +1,4 @@
-#Kode for dataset downloading
-#import kagglehub
-#https://www.kaggle.com/datasets/muratkokludataset/dry-bean-dataset/data
-# Download latest version
-#path = kagglehub.dataset_download("fatihb/coffee-quality-data-cqi")
-#print("Path to dataset files:", path)
-
-
+# Kode for dataset downloading
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -17,57 +10,21 @@ from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_dis
 from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import dendrogram, linkage
 from kneed import KneeLocator
+from sklearn.neighbors import NearestNeighbors
 
-#path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
-path = "C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
-#1. Get dataset
-
+# 1. Get dataset
+path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
 df = pd.read_csv(path)
 df = df.drop(columns=['Class'])
 
-#2. Handling data
-#Printing data types:
+# 2. Handling data
 print(df.dtypes)
-
-# Get all rows that are duplicates, including original rows
-all_duplicates = df[df.duplicated(keep=False)]
-# Print the number of duplicates before removal
 print(f"Number of duplicate rows before removal: {df.duplicated().sum()}")
-# Create a function to find duplicated values in each row
-def find_duplicated_values(row, df_columns):
-    duplicates = {}
-    for col in df_columns:
-        if (df[df[col] == row[col]].shape[0] > 1):  # Check if the value appears more than once in the column
-            duplicates[col] = row[col]
-    return duplicates
-
-# Apply the function to find specific duplicated values for each duplicate row
-detailed_duplicates = all_duplicates.copy()
-detailed_duplicates['Duplicated Values'] = all_duplicates.apply(
-    lambda row: find_duplicated_values(row, df.columns), axis=1
-)
-
-# Print detailed duplicates with specific duplicated values
-if not detailed_duplicates.empty:
-    print(f"Number of duplicated rows (including original rows): {len(detailed_duplicates)}")
-    print(detailed_duplicates[['Duplicated Values']])
-else:
-    print("No duplicated rows found.")
-
-
-# Remove duplicates
 data = df.drop_duplicates()
-
-# Print the number of duplicates after removal
 print(f"Number of duplicate rows after removal: {data.duplicated().sum()}")
-
-# Check for missing values
 
 print("Printing missing data:")
 print(data.isnull().sum())
-
-# Visualize missing data (optional, if you use seaborn)
-
 sns.heatmap(data.isnull(), cbar=False, cmap="viridis")
 plt.show()
 
@@ -80,50 +37,63 @@ for column in data.columns:
 data.hist(bins=20, figsize=(12, 10))
 plt.show()
 
-# Checking feature correlation via correlation matrix
+# Correlation matrix and removal of redundant features
 corr = data.corr()
-
-# Heatmap visualization
 sns.heatmap(corr, annot=True, cmap="coolwarm")
 plt.show()
 
-# Set a threshold for correlation
 corr_threshold = 0.9
-
-# Create a boolean mask to identify highly correlated features
 high_corr_mask = (corr.abs() > corr_threshold) & (corr != 1.0)
-
-# Track columns to drop
 to_drop = set()
 
-# Iterate through the correlation matrix to find features to drop
 for col in high_corr_mask.columns:
-    # If the column is not already in the list of features to drop
     if col not in to_drop:
-        # Get correlated columns
         correlated_cols = high_corr_mask.index[high_corr_mask[col]].tolist()
-        # Add correlated columns to drop (skip the current column itself)
         to_drop.update(correlated_cols)
-
-# Remove the redundant features from the datframe
 
 print("The columns considered for dropping are: ", to_drop)
 data_reduced = data.drop(columns=to_drop)
-corr_reduced = data_reduced.corr()
-
-# Heatmap visualization
-sns.heatmap(corr_reduced, annot=True, cmap="coolwarm")
+sns.heatmap(data_reduced.corr(), annot=True, cmap="coolwarm")
 plt.show()
 
-#Scaling data
-#
-# Jei turiu duomenu kurie ne virsyja 1 ar reikia skalizuot?
+
+# Scale the data
 scaler = StandardScaler()
-data_scaled = scaler.fit_transform(data_reduced.select_dtypes(include=["float64", "int64"]))
+data_scaled = scaler.fit_transform(data_reduced)
 
+# Calculate the distances to the nearest neighbors
+nbrs = NearestNeighbors(n_neighbors=10).fit(data_scaled)
+distances, indices = nbrs.kneighbors(data_scaled)
 
-linked = linkage(data_scaled, method='ward')  # 'ward' for minimizing variance
-# Plot the dendrogram
+# Sort the distances to look for a good eps value
+sorted_distances = np.sort(distances[:, -1], axis=0)
+
+# Plot the sorted distances (this is often used to determine a good eps value for DBSCAN)
+plt.figure(figsize=(10, 6))
+plt.plot(sorted_distances)
+plt.title("Sorted Distances to Nearest Neighbors")
+plt.xlabel("Points")
+plt.ylabel("Distance")
+plt.show()
+
+# Define a Dunn index calculation function
+def calculate_dunn_index(data, labels):
+    unique_labels = np.unique(labels)
+    inter_cluster_distances = []
+    intra_cluster_distances = []
+
+    for i, cluster_i in enumerate(unique_labels):
+        points_i = data[labels == cluster_i]
+        intra_cluster_distances.append(np.max(pairwise_distances(points_i)))
+
+        for cluster_j in unique_labels[i + 1:]:
+            points_j = data[labels == cluster_j]
+            inter_cluster_distances.append(np.min(pairwise_distances(points_i, points_j)))
+
+    return np.min(inter_cluster_distances) / np.max(intra_cluster_distances)
+
+# Agglomerative Clustering dendrogram
+linked = linkage(data_scaled, method='ward')
 plt.figure(figsize=(10, 7))
 dendrogram(linked, truncate_mode='level', p=10, leaf_rotation=45, leaf_font_size=10, show_contracted=True)
 plt.title("Dendrogram for Agglomerative Clustering")
@@ -131,51 +101,7 @@ plt.xlabel("Data Points")
 plt.ylabel("Euclidean Distance")
 plt.show()
 
-#Kmeans Clustering:
-def calculate_dunn_index(data, labels):
-    # Pairwise distances
-    distances = pairwise_distances(data)
-
-    # Find unique clusters
-    unique_labels = np.unique(labels)
-
-    # Inter-cluster distance (minimum distance between clusters)
-    inter_cluster_distances = []
-    for i in range(len(unique_labels)):
-        for j in range(i + 1, len(unique_labels)):
-            cluster_i = data[labels == unique_labels[i]]
-            cluster_j = data[labels == unique_labels[j]]
-            inter_cluster_distances.append(
-                np.min(pairwise_distances(cluster_i, cluster_j))
-            )
-    min_inter_cluster_distance = np.min(inter_cluster_distances)
-
-    # Intra-cluster distance (maximum within each cluster)
-    intra_cluster_distances = []
-    for label in unique_labels:
-        cluster_points = data[labels == label]
-        intra_cluster_distances.append(np.max(pairwise_distances(cluster_points)))
-    max_intra_cluster_distance = np.max(intra_cluster_distances)
-
-    # Compute Dunn Index
-    dunn_index = min_inter_cluster_distance / max_intra_cluster_distance
-    return dunn_index
-
-# Counting WCSS depending on cluster count
-#wcss = []
-#for k in range(1, 11):
-#    kmeans = KMeans(n_clusters=k, random_state=42)
-#    kmeans.fit(data_scaled)
-#    wcss.append(kmeans.inertia_)
-
-#plt.plot(range(1, 11), wcss, marker='o')
-#plt.xlabel("Cluster count (k)")
-#plt.ylabel("WCSS")
-#plt.title("WCSS depending on cluster count")
-#plt.show()
-#optimal_kmeans = 7  # Choose based on graph
-#2 metodas
-# Counting WCSS depending on cluster count
+# K-means WCSS and elbow method
 wcss = []
 k_values = range(1, 11)
 for k in k_values:
@@ -183,111 +109,20 @@ for k in k_values:
     kmeans.fit(data_scaled)
     wcss.append(kmeans.inertia_)
 
-# Plot WCSS graph
 plt.plot(k_values, wcss, marker='o')
 plt.xlabel("Cluster count (k)")
 plt.ylabel("WCSS")
 plt.title("WCSS depending on cluster count")
 plt.show()
 
-# Automatically detect the "elbow" point
 knee_locator = KneeLocator(k_values, wcss, curve="convex", direction="decreasing")
-optimal_kmeans = knee_locator.knee  # The optimal number of clusters
-
+optimal_kmeans = knee_locator.knee
 print(f"Optimal number of clusters detected: {optimal_kmeans}")
-# Choosing best cluster count based on wcss
-# Define parameter ranges for eps and min_samples
-eps_values = np.linspace(0.1, 2.0, 20)
-min_samples_values = range(5, 50, 10)
-
-# Initialize lists to store the results
-results_eps_min_samples = []
-
-# Perform grid search over eps and min_samples
-for eps in eps_values:
-    for min_samples in min_samples_values:
-        dbscan = DBSCAN(eps=eps, min_samples=min_samples)
-        labels = dbscan.fit_predict(data_scaled)
-
-        # Exclude noise points (-1) for valid clusters
-        core_samples_mask = labels != -1
-        num_clusters = len(np.unique(labels)) - (1 if -1 in labels else 0)  # Excluding noise (-1)
-        num_noise_points = np.sum(labels == -1)
-
-        # Calculate clustering metrics if there are valid clusters
-        if num_clusters > 1:
-            silhouette_avg = silhouette_score(data_scaled[core_samples_mask], labels[core_samples_mask])
-            davies_bouldin = davies_bouldin_score(data_scaled[core_samples_mask], labels[core_samples_mask])
-            dunn_index = calculate_dunn_index(data_scaled[core_samples_mask], labels[core_samples_mask])
-        else:
-            silhouette_avg = -1
-            davies_bouldin = -1
-            dunn_index = -1
-
-        # Store the results for each combination
-        results_eps_min_samples.append({
-            "eps": eps,
-            "min_samples": min_samples,
-            "num_clusters": num_clusters,
-            "num_noise_points": num_noise_points,
-            "Silhouette Score": silhouette_avg,
-            "Davies-Bouldin Index": davies_bouldin,
-            "Dunn Index": dunn_index
-        })
-
-# Step 3: Convert results to a DataFrame for easy analysis
-import pandas as pd
-
-results_df = pd.DataFrame(results_eps_min_samples)
-
-# Step 4: Plot the effects of eps and min_samples on clustering metrics and cluster counts
-fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-
-# Plot number of clusters and noise points
-axes[0, 0].scatter(results_df['eps'], results_df['min_samples'], c=results_df['num_clusters'], cmap='viridis', s=50)
-axes[0, 0].set_title("Number of Clusters")
-axes[0, 0].set_xlabel('eps')
-axes[0, 0].set_ylabel('min_samples')
-
-axes[0, 1].scatter(results_df['eps'], results_df['min_samples'], c=results_df['num_noise_points'], cmap='viridis', s=50)
-axes[0, 1].set_title("Number of Noise Points")
-axes[0, 1].set_xlabel('eps')
-axes[0, 1].set_ylabel('min_samples')
-
-# Plot Silhouette Score, Davies-Bouldin, and Dunn Index
-axes[1, 0].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Silhouette Score'], cmap='viridis', s=50)
-axes[1, 0].set_title("Silhouette Score")
-axes[1, 0].set_xlabel('eps')
-axes[1, 0].set_ylabel('min_samples')
-
-axes[1, 1].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Davies-Bouldin Index'], cmap='viridis',
-                   s=50)
-axes[1, 1].set_title("Davies-Bouldin Index")
-axes[1, 1].set_xlabel('eps')
-axes[1, 1].set_ylabel('min_samples')
-
-axes[1, 2].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Dunn Index'], cmap='viridis', s=50)
-axes[1, 2].set_title("Dunn Index")
-axes[1, 2].set_xlabel('eps')
-axes[1, 2].set_ylabel('min_samples')
-
-plt.tight_layout()
-plt.show()
-
-# Step 5: Display results for best performing parameters
-best_silhouette_score = results_df.loc[results_df['Silhouette Score'].idxmax()]
-best_db_index = results_df.loc[results_df['Davies-Bouldin Index'].idxmin()]
-best_dunn_index = results_df.loc[results_df['Dunn Index'].idxmax()]
-
-print("Best Parameters based on Silhouette Score:", best_silhouette_score)
-print("Best Parameters based on Davies-Bouldin Index:", best_db_index)
-print("Best Parameters based on Dunn Index:", best_dunn_index)
-
 
 # Define parameter grids for each method
-kmeans_params = {'n_clusters': range(3 , 8)}
-dbscan_params = {'eps': [0.1, 0.2, 0.5, 1.0, 1.3], 'min_samples': [5, 10]}
-agg_params = {'n_clusters': range(3 , 8), 'linkage': ['ward', 'complete', 'average'], }
+kmeans_params = {'n_clusters': range(3, 8)}
+dbscan_params = {'eps': [0.5, 0.7, 0.9], 'min_samples': [5, 10, 20, 40]}
+agg_params = {'n_clusters': range(3, 8), 'linkage': ['ward', 'complete', 'average']}
 
 best_params = {}
 
@@ -306,30 +141,11 @@ best_dbscan_score = -1
 for params in ParameterGrid(dbscan_params):
     dbscan = DBSCAN(**params)
     labels = dbscan.fit_predict(data_scaled)
-
-    core_samples_mask = labels != -1
-    if np.sum(core_samples_mask) > 1:
-        score = silhouette_score(data_scaled[core_samples_mask], labels[core_samples_mask])
+    if len(np.unique(labels)) > 1:
+        score = silhouette_score(data_scaled, labels)
         if score > best_dbscan_score:
             best_dbscan_score = score
             best_params['DBSCAN'] = params
-
-dbscan = DBSCAN(**best_params['DBSCAN'])
-labels_dbscan = dbscan.fit_predict(data_scaled)
-core_samples_mask = labels_dbscan != -1
-if np.sum(core_samples_mask) > 1:
-    silhouette_avg_dbscan = silhouette_score(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
-    davies_bouldin_dbscan = davies_bouldin_score(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
-    dunn_index_dbscan = calculate_dunn_index(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
-else:
-    silhouette_avg_dbscan = -1
-    davies_bouldin_dbscan = -1
-    dunn_index_dbscan = -1
-
-print("DBSCAN Metrics (excluding noise):")
-print(f"Silhouette Score: {silhouette_avg_dbscan}")
-print(f"Davies-Bouldin Index: {davies_bouldin_dbscan}")
-print(f"Dunn Index: {dunn_index_dbscan}")
 
 # Evaluate Agglomerative Clustering
 best_agg_score = -1
@@ -344,53 +160,38 @@ for params in ParameterGrid(agg_params):
 print("Best Parameters:")
 print(best_params)
 
-# Visualize Clusters for Each Method (with 3 subplots)
-# Store results for comparison
+# Visualize clusters for each method
 results = {}
-
-# Define the clustering methods
 methods = {
     "KMeans": KMeans(**best_params['KMeans'], random_state=42),
     "DBSCAN": DBSCAN(**best_params['DBSCAN']),
     "Agglomerative": AgglomerativeClustering(**best_params['Agglomerative']),
 }
 
-# Create a figure for the subplots
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-
-# 1. Apply each method and evaluate quality metrics
 for idx, (name, model) in enumerate(methods.items()):
-    # Apply clustering model
     labels = model.fit_predict(data_scaled)
 
-    # Visualize Clusters
+    # Visualize Clusters in PCA space
     pca = PCA(n_components=2)
     data_pca = pca.fit_transform(data_scaled)
-
-    # Scatter plot of clusters
-    ax = axes[idx]  # Choose the correct subplot axis
-
-    # Check if DBSCAN has noise points and label them as 'Noise'
-    if -1 in labels:  # DBSCAN noise points
+    ax = axes[idx]
+    if name == "DBSCAN" and -1 in labels:
         ax.scatter(data_pca[labels == -1, 0], data_pca[labels == -1, 1], c='red', s=30, marker='x', label='Noise')
-
-    # For regular points, add each cluster and label them
     scatter = ax.scatter(data_pca[:, 0], data_pca[:, 1], c=labels, cmap='viridis', s=50, alpha=0.6, label="Clusters")
-
     ax.set_title(f"{name} Clusters")
     ax.set_xlabel("Principal Component 1")
     ax.set_ylabel("Principal Component 2")
-
-    # Add colorbar for cluster labels
     fig.colorbar(scatter, ax=ax, orientation='horizontal', fraction=0.02, pad=0.1)
-
-    # Add legend
     ax.legend(loc="upper right")
 
-    # Store quality metrics for comparison
-    silhouette_avg = silhouette_score(data_scaled, labels) if len(np.unique(labels)) > 1 else -1
-    davies_bouldin = davies_bouldin_score(data_scaled, labels) if len(np.unique(labels)) > 1 else -1
-    dunn_index = calculate_dunn_index(data_scaled, labels) if len(np.unique(labels)) > 1 else -1
+    # Store quality metrics
+    if len(np.unique(labels)) > 1:
+        silhouette_avg = silhouette_score(data_scaled, labels)
+        davies_bouldin = davies_bouldin_score(data_scaled, labels)
+        dunn_index = calculate_dunn_index(data_scaled, labels)
+    else:
+        silhouette_avg = davies_bouldin = dunn_index = -1
 
     results[name] = {
         "Silhouette Score": silhouette_avg,
@@ -398,56 +199,69 @@ for idx, (name, model) in enumerate(methods.items()):
         "Dunn Index": dunn_index,
     }
 
-# Show the plots
 plt.show()
 
-
-# 3. Display the results
-print("Clustering Quality Metrics Comparison:")
-for method, metrics in results.items():
-    print(f"\n{method} Results:")
-    for metric, value in metrics.items():
-        print(f"{metric}: {value}")
-
-#Method with Best Scores: Based on the metrics you compute, select the clustering
-# method with the highest Silhouette Score, the lowest Davies-Bouldin Index, and the highest Dunn Index.
-
-# Convert results dictionary to DataFrame
+# Convert results to DataFrame
 results_df = pd.DataFrame.from_dict(results, orient="index")
-
-# Add a column for the best metric per row
-results_df["Best Metric"] = results_df.idxmax(axis=1)
-
-# Display the summary table
 print("Clustering Metrics Summary:")
+pd.set_option('display.max_columns', None)  # Show all columns
+pd.set_option('display.max_rows', None)     # Show all rows if needed (optional)
 print(results_df)
 
-# Analyze DBSCAN cluster distribution
-dbscan_cluster_counts = pd.Series(labels_dbscan).value_counts().sort_index()
-noise_points = dbscan_cluster_counts[-1] if -1 in dbscan_cluster_counts else 0
+# DBSCAN cluster analysis and noise removal
+labels_dbscan = DBSCAN(**best_params['DBSCAN']).fit_predict(data_scaled)
 
-print("DBSCAN Cluster Analysis:")
-print(f"Total clusters (excluding noise): {len(dbscan_cluster_counts) - 1}")
-print(f"Noise points: {noise_points}")
-print("Cluster sizes:")
-print(dbscan_cluster_counts)
+# Exclude noise points (-1) and only keep valid clusters
+valid_mask = labels_dbscan != -1
+data_without_noise = data_scaled[valid_mask]
+labels_without_noise = labels_dbscan[valid_mask]
 
-# Compare to other methods
-fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+# Analyze DBSCAN clusters
+dbscan_cluster_counts = pd.Series(labels_without_noise).value_counts().sort_index()
+print(f"DBSCAN Cluster Sizes (Excluding Noise):\n{dbscan_cluster_counts}")
 
-# DBSCAN Clusters
-axes[0].scatter(data_pca[:, 0], data_pca[:, 1], c=labels_dbscan, cmap='viridis', s=50, alpha=0.6)
-axes[0].set_title("DBSCAN Clusters")
-axes[0].set_xlabel("PCA Component 1")
-axes[0].set_ylabel("PCA Component 2")
+# Data with clusters for visualization
+data_with_clusters_dbscan = pd.DataFrame(data_without_noise, columns=data_reduced.columns)
+data_with_clusters_dbscan['Cluster'] = labels_without_noise
 
-# Overlay comparison with KMeans
-labels_kmeans = KMeans(**best_params['KMeans'], random_state=42).fit_predict(data_scaled)
-axes[1].scatter(data_pca[:, 0], data_pca[:, 1], c=labels_kmeans, cmap='viridis', s=50, alpha=0.6)
-axes[1].set_title("KMeans Clusters")
-axes[1].set_xlabel("PCA Component 1")
-axes[1].set_ylabel("PCA Component 2")
+# Plotting histograms for each feature in each DBSCAN cluster
+num_features = len(data_with_clusters_dbscan.columns) - 1  # Exclude the 'Cluster' column
+fig, axes = plt.subplots(num_features, 1, figsize=(8, 2 * num_features))  # Adjust figure height for clarity
 
-plt.tight_layout()
+for i, column in enumerate(data_with_clusters_dbscan.columns[:-1]):  # Exclude the 'Cluster' column
+    ax = axes[i]
+    for cluster in data_with_clusters_dbscan['Cluster'].unique():
+        cluster_data = data_with_clusters_dbscan[data_with_clusters_dbscan['Cluster'] == cluster]
+        ax.hist(cluster_data[column], bins=40, alpha=0.5, density=True, label=f"Cluster {cluster}")  # Use density=True
+    ax.set_title(f"Distribution of {column} by DBSCAN Cluster")
+    ax.set_xlabel(f"{column} Values")
+    ax.set_ylabel("Density")  # Update to reflect density
+    ax.legend(title="Clusters")
+plt.tight_layout()  # Adjust layout
 plt.show()
 
+# KMeans Cluster Analysis
+labels_kmeans = KMeans(**best_params['KMeans'], random_state=42).fit_predict(data_scaled)
+# Analyze KMeans clusters
+kmeans_cluster_counts = pd.Series(labels_kmeans).value_counts().sort_index()
+print(f"KMeans Cluster Sizes:\n{kmeans_cluster_counts}")
+
+# Data with clusters for analysis
+data_with_clusters = pd.DataFrame(data_scaled, columns=data_reduced.columns)
+data_with_clusters['Cluster'] = labels_kmeans
+
+# Plotting histograms for each feature in each cluster
+num_features = len(data_with_clusters.columns) - 1  # Exclude the 'Cluster' column
+fig, axes = plt.subplots(num_features, 1, figsize=(12, 2 * num_features))  # Adjust figure height for clarity
+
+for i, column in enumerate(data_with_clusters.columns[:-1]):  # Exclude the 'Cluster' column
+    ax = axes[i]
+    for cluster in data_with_clusters['Cluster'].unique():
+        cluster_data = data_with_clusters[data_with_clusters['Cluster'] == cluster]
+        ax.hist(cluster_data[column], bins=40, alpha=0.5, density=True, label=f"Cluster {cluster}")  # Use density=True
+    ax.set_title(f"Distribution of {column} by Cluster")
+    ax.set_xlabel(f"{column} Values")
+    ax.set_ylabel("Density")  # Update to reflect density
+    ax.legend(title="Clusters")
+plt.tight_layout()  # Adjust layout
+plt.show()
