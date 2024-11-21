@@ -16,10 +16,10 @@ from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
 from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_distances
 from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import dendrogram, linkage
+from kneed import KneeLocator
 
-
-path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
-
+#path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
+path = "C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
 #1. Get dataset
 
 df = pd.read_csv(path)
@@ -122,6 +122,15 @@ scaler = StandardScaler()
 data_scaled = scaler.fit_transform(data_reduced.select_dtypes(include=["float64", "int64"]))
 
 
+linked = linkage(data_scaled, method='ward')  # 'ward' for minimizing variance
+# Plot the dendrogram
+plt.figure(figsize=(10, 7))
+dendrogram(linked, truncate_mode='level', p=10, leaf_rotation=45, leaf_font_size=10, show_contracted=True)
+plt.title("Dendrogram for Agglomerative Clustering")
+plt.xlabel("Data Points")
+plt.ylabel("Euclidean Distance")
+plt.show()
+
 #Kmeans Clustering:
 def calculate_dunn_index(data, labels):
     # Pairwise distances
@@ -152,36 +161,131 @@ def calculate_dunn_index(data, labels):
     dunn_index = min_inter_cluster_distance / max_intra_cluster_distance
     return dunn_index
 
-linked = linkage(data_scaled, method='ward')  # 'ward' for minimizing variance
-# Plot the dendrogram
-plt.figure(figsize=(10, 7))
-dendrogram(linked, truncate_mode='level', p=10, leaf_rotation=45, leaf_font_size=10, show_contracted=True)
-plt.title("Dendrogram for Agglomerative Clustering")
-plt.xlabel("Data Points")
-plt.ylabel("Euclidean Distance")
-plt.show()
+# Counting WCSS depending on cluster count
+#wcss = []
+#for k in range(1, 11):
+#    kmeans = KMeans(n_clusters=k, random_state=42)
+#    kmeans.fit(data_scaled)
+#    wcss.append(kmeans.inertia_)
 
+#plt.plot(range(1, 11), wcss, marker='o')
+#plt.xlabel("Cluster count (k)")
+#plt.ylabel("WCSS")
+#plt.title("WCSS depending on cluster count")
+#plt.show()
+#optimal_kmeans = 7  # Choose based on graph
+#2 metodas
 # Counting WCSS depending on cluster count
 wcss = []
-for k in range(1, 11):
+k_values = range(1, 11)
+for k in k_values:
     kmeans = KMeans(n_clusters=k, random_state=42)
     kmeans.fit(data_scaled)
     wcss.append(kmeans.inertia_)
 
-plt.plot(range(1, 11), wcss, marker='o')
+# Plot WCSS graph
+plt.plot(k_values, wcss, marker='o')
 plt.xlabel("Cluster count (k)")
 plt.ylabel("WCSS")
 plt.title("WCSS depending on cluster count")
 plt.show()
 
+# Automatically detect the "elbow" point
+knee_locator = KneeLocator(k_values, wcss, curve="convex", direction="decreasing")
+optimal_kmeans = knee_locator.knee  # The optimal number of clusters
+
+print(f"Optimal number of clusters detected: {optimal_kmeans}")
 # Choosing best cluster count based on wcss
-optimal_kmeans = 7  # Choose based on graph
+# Define narrower parameter ranges for eps and min_samples
+eps_values = np.linspace(0.1, 2.0, 20)  # Reduced eps range
+min_samples_values = range(5, 50, 10)  # Adjusted min_samples range
+
+# Initialize lists to store the results
+results_eps_min_samples = []
+
+# Perform grid search over eps and min_samples
+for eps in eps_values:
+    for min_samples in min_samples_values:
+        dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+        labels = dbscan.fit_predict(data_scaled)
+
+        # Exclude noise points (-1) for valid clusters
+        core_samples_mask = labels != -1
+        num_clusters = len(np.unique(labels)) - (1 if -1 in labels else 0)  # Excluding noise (-1)
+        num_noise_points = np.sum(labels == -1)
+
+        # Calculate clustering metrics if there are valid clusters
+        if num_clusters > 1:
+            silhouette_avg = silhouette_score(data_scaled[core_samples_mask], labels[core_samples_mask])
+            davies_bouldin = davies_bouldin_score(data_scaled[core_samples_mask], labels[core_samples_mask])
+            dunn_index = calculate_dunn_index(data_scaled[core_samples_mask], labels[core_samples_mask])
+        else:
+            silhouette_avg = -1
+            davies_bouldin = -1
+            dunn_index = -1
+
+        # Store the results for each combination
+        results_eps_min_samples.append({
+            "eps": eps,
+            "min_samples": min_samples,
+            "num_clusters": num_clusters,
+            "num_noise_points": num_noise_points,
+            "Silhouette Score": silhouette_avg,
+            "Davies-Bouldin Index": davies_bouldin,
+            "Dunn Index": dunn_index
+        })
+
+# Convert results to a DataFrame for easy analysis
+results_df = pd.DataFrame(results_eps_min_samples)
+
+# Create heatmaps to visualize the impact of eps and min_samples on clustering metrics
+fig, axes = plt.subplots(2, 2, figsize=(18, 12))
+
+# Heatmap for Number of Clusters
+pivot_clusters = results_df.pivot("min_samples", "eps", "num_clusters")
+sns.heatmap(pivot_clusters, cmap="viridis", annot=True, fmt="d", ax=axes[0, 0])
+axes[0, 0].set_title("Number of Clusters (Excluding Noise)")
+axes[0, 0].set_xlabel('eps')
+axes[0, 0].set_ylabel('min_samples')
+
+# Heatmap for Number of Noise Points
+pivot_noise = results_df.pivot("min_samples", "eps", "num_noise_points")
+sns.heatmap(pivot_noise, cmap="viridis", annot=True, fmt="d", ax=axes[0, 1])
+axes[0, 1].set_title("Number of Noise Points")
+axes[0, 1].set_xlabel('eps')
+axes[0, 1].set_ylabel('min_samples')
+
+# Heatmap for Silhouette Score
+pivot_silhouette = results_df.pivot("min_samples", "eps", "Silhouette Score")
+sns.heatmap(pivot_silhouette, cmap="coolwarm", annot=True, fmt=".2f", ax=axes[1, 0])
+axes[1, 0].set_title("Silhouette Score")
+axes[1, 0].set_xlabel('eps')
+axes[1, 0].set_ylabel('min_samples')
+
+# Heatmap for Davies-Bouldin Index
+pivot_db = results_df.pivot("min_samples", "eps", "Davies-Bouldin Index")
+sns.heatmap(pivot_db, cmap="coolwarm", annot=True, fmt=".2f", ax=axes[1, 1])
+axes[1, 1].set_title("Davies-Bouldin Index")
+axes[1, 1].set_xlabel('eps')
+axes[1, 1].set_ylabel('min_samples')
+
+plt.tight_layout()
+plt.show()
+
+# Display results for best performing parameters based on metrics
+best_silhouette_score = results_df.loc[results_df['Silhouette Score'].idxmax()]
+best_db_index = results_df.loc[results_df['Davies-Bouldin Index'].idxmin()]
+best_dunn_index = results_df.loc[results_df['Dunn Index'].idxmax()]
+
+print("Best Parameters based on Silhouette Score:", best_silhouette_score)
+print("Best Parameters based on Davies-Bouldin Index:", best_db_index)
+print("Best Parameters based on Dunn Index:", best_dunn_index)
 
 
 # Define parameter grids for each method
-kmeans_params = {'n_clusters': range(4 , 8)}
-dbscan_params = {'eps': [0.5, 1.0], 'min_samples': [5, 10]}
-agg_params = {'n_clusters': range(4 , 8), 'linkage': ['ward', 'complete', 'average'], }
+kmeans_params = {'n_clusters': range(3 , 8)}
+dbscan_params = {'eps': [0.1, 0.2, 0.5, 1.0, 1.3], 'min_samples': [5, 10]}
+agg_params = {'n_clusters': range(3 , 8), 'linkage': ['ward', 'complete', 'average'], }
 
 best_params = {}
 
@@ -200,11 +304,30 @@ best_dbscan_score = -1
 for params in ParameterGrid(dbscan_params):
     dbscan = DBSCAN(**params)
     labels = dbscan.fit_predict(data_scaled)
-    if len(np.unique(labels)) > 1:  # Ensure valid clustering
-        score = silhouette_score(data_scaled, labels)
+
+    core_samples_mask = labels != -1
+    if np.sum(core_samples_mask) > 1:
+        score = silhouette_score(data_scaled[core_samples_mask], labels[core_samples_mask])
         if score > best_dbscan_score:
             best_dbscan_score = score
             best_params['DBSCAN'] = params
+
+dbscan = DBSCAN(**best_params['DBSCAN'])
+labels_dbscan = dbscan.fit_predict(data_scaled)
+core_samples_mask = labels_dbscan != -1
+if np.sum(core_samples_mask) > 1:
+    silhouette_avg_dbscan = silhouette_score(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
+    davies_bouldin_dbscan = davies_bouldin_score(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
+    dunn_index_dbscan = calculate_dunn_index(data_scaled[core_samples_mask], labels_dbscan[core_samples_mask])
+else:
+    silhouette_avg_dbscan = -1
+    davies_bouldin_dbscan = -1
+    dunn_index_dbscan = -1
+
+print("DBSCAN Metrics (excluding noise):")
+print(f"Silhouette Score: {silhouette_avg_dbscan}")
+print(f"Davies-Bouldin Index: {davies_bouldin_dbscan}")
+print(f"Dunn Index: {dunn_index_dbscan}")
 
 # Evaluate Agglomerative Clustering
 best_agg_score = -1
@@ -286,4 +409,43 @@ for method, metrics in results.items():
 
 #Method with Best Scores: Based on the metrics you compute, select the clustering
 # method with the highest Silhouette Score, the lowest Davies-Bouldin Index, and the highest Dunn Index.
+
+# Convert results dictionary to DataFrame
+results_df = pd.DataFrame.from_dict(results, orient="index")
+
+# Add a column for the best metric per row
+results_df["Best Metric"] = results_df.idxmax(axis=1)
+
+# Display the summary table
+print("Clustering Metrics Summary:")
+print(results_df)
+
+# Analyze DBSCAN cluster distribution
+dbscan_cluster_counts = pd.Series(labels_dbscan).value_counts().sort_index()
+noise_points = dbscan_cluster_counts[-1] if -1 in dbscan_cluster_counts else 0
+
+print("DBSCAN Cluster Analysis:")
+print(f"Total clusters (excluding noise): {len(dbscan_cluster_counts) - 1}")
+print(f"Noise points: {noise_points}")
+print("Cluster sizes:")
+print(dbscan_cluster_counts)
+
+# Compare to other methods
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+# DBSCAN Clusters
+axes[0].scatter(data_pca[:, 0], data_pca[:, 1], c=labels_dbscan, cmap='viridis', s=50, alpha=0.6)
+axes[0].set_title("DBSCAN Clusters")
+axes[0].set_xlabel("PCA Component 1")
+axes[0].set_ylabel("PCA Component 2")
+
+# Overlay comparison with KMeans
+labels_kmeans = KMeans(**best_params['KMeans'], random_state=42).fit_predict(data_scaled)
+axes[1].scatter(data_pca[:, 0], data_pca[:, 1], c=labels_kmeans, cmap='viridis', s=50, alpha=0.6)
+axes[1].set_title("KMeans Clusters")
+axes[1].set_xlabel("PCA Component 1")
+axes[1].set_ylabel("PCA Component 2")
+
+plt.tight_layout()
+plt.show()
 
