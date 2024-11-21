@@ -196,9 +196,9 @@ optimal_kmeans = knee_locator.knee  # The optimal number of clusters
 
 print(f"Optimal number of clusters detected: {optimal_kmeans}")
 # Choosing best cluster count based on wcss
-# Define narrower parameter ranges for eps and min_samples
-eps_values = np.linspace(0.1, 2.0, 20)  # Reduced eps range
-min_samples_values = range(5, 50, 10)  # Adjusted min_samples range
+# Define parameter ranges for eps and min_samples
+eps_values = np.linspace(0.1, 2.0, 20)
+min_samples_values = range(5, 50, 10)
 
 # Initialize lists to store the results
 results_eps_min_samples = []
@@ -235,44 +235,46 @@ for eps in eps_values:
             "Dunn Index": dunn_index
         })
 
-# Convert results to a DataFrame for easy analysis
+# Step 3: Convert results to a DataFrame for easy analysis
+import pandas as pd
+
 results_df = pd.DataFrame(results_eps_min_samples)
 
-# Create heatmaps to visualize the impact of eps and min_samples on clustering metrics
-fig, axes = plt.subplots(2, 2, figsize=(18, 12))
+# Step 4: Plot the effects of eps and min_samples on clustering metrics and cluster counts
+fig, axes = plt.subplots(2, 3, figsize=(18, 12))
 
-# Heatmap for Number of Clusters
-pivot_clusters = results_df.pivot("min_samples", "eps", "num_clusters")
-sns.heatmap(pivot_clusters, cmap="viridis", annot=True, fmt="d", ax=axes[0, 0])
-axes[0, 0].set_title("Number of Clusters (Excluding Noise)")
+# Plot number of clusters and noise points
+axes[0, 0].scatter(results_df['eps'], results_df['min_samples'], c=results_df['num_clusters'], cmap='viridis', s=50)
+axes[0, 0].set_title("Number of Clusters")
 axes[0, 0].set_xlabel('eps')
 axes[0, 0].set_ylabel('min_samples')
 
-# Heatmap for Number of Noise Points
-pivot_noise = results_df.pivot("min_samples", "eps", "num_noise_points")
-sns.heatmap(pivot_noise, cmap="viridis", annot=True, fmt="d", ax=axes[0, 1])
+axes[0, 1].scatter(results_df['eps'], results_df['min_samples'], c=results_df['num_noise_points'], cmap='viridis', s=50)
 axes[0, 1].set_title("Number of Noise Points")
 axes[0, 1].set_xlabel('eps')
 axes[0, 1].set_ylabel('min_samples')
 
-# Heatmap for Silhouette Score
-pivot_silhouette = results_df.pivot("min_samples", "eps", "Silhouette Score")
-sns.heatmap(pivot_silhouette, cmap="coolwarm", annot=True, fmt=".2f", ax=axes[1, 0])
+# Plot Silhouette Score, Davies-Bouldin, and Dunn Index
+axes[1, 0].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Silhouette Score'], cmap='viridis', s=50)
 axes[1, 0].set_title("Silhouette Score")
 axes[1, 0].set_xlabel('eps')
 axes[1, 0].set_ylabel('min_samples')
 
-# Heatmap for Davies-Bouldin Index
-pivot_db = results_df.pivot("min_samples", "eps", "Davies-Bouldin Index")
-sns.heatmap(pivot_db, cmap="coolwarm", annot=True, fmt=".2f", ax=axes[1, 1])
+axes[1, 1].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Davies-Bouldin Index'], cmap='viridis',
+                   s=50)
 axes[1, 1].set_title("Davies-Bouldin Index")
 axes[1, 1].set_xlabel('eps')
 axes[1, 1].set_ylabel('min_samples')
 
+axes[1, 2].scatter(results_df['eps'], results_df['min_samples'], c=results_df['Dunn Index'], cmap='viridis', s=50)
+axes[1, 2].set_title("Dunn Index")
+axes[1, 2].set_xlabel('eps')
+axes[1, 2].set_ylabel('min_samples')
+
 plt.tight_layout()
 plt.show()
 
-# Display results for best performing parameters based on metrics
+# Step 5: Display results for best performing parameters
 best_silhouette_score = results_df.loc[results_df['Silhouette Score'].idxmax()]
 best_db_index = results_df.loc[results_df['Davies-Bouldin Index'].idxmin()]
 best_dunn_index = results_df.loc[results_df['Dunn Index'].idxmax()]
