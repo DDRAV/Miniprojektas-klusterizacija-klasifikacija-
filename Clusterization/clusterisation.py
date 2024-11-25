@@ -4,24 +4,26 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import ParameterGrid
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
-from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_distances
+from sklearn.metrics import silhouette_score, davies_bouldin_score, pairwise_distances, adjusted_rand_score, confusion_matrix, classification_report
 from sklearn.decomposition import PCA
 from scipy.cluster.hierarchy import dendrogram, linkage
 from kneed import KneeLocator
 from sklearn.neighbors import NearestNeighbors
 
 # 1. Get dataset
-path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
+#C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv
+#C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv
+path = "C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
 df = pd.read_csv(path)
-df = df.drop(columns=['Class'])
 
 # 2. Handling data
 print(df.dtypes)
 print(f"Number of duplicate rows before removal: {df.duplicated().sum()}")
-data = df.drop_duplicates()
-print(f"Number of duplicate rows after removal: {data.duplicated().sum()}")
+data_no_dupl = df.drop_duplicates()
+print(f"Number of duplicate rows after removal: {data_no_dupl.duplicated().sum()}")
+data = data_no_dupl.drop(columns=['Class'])
 
 print("Printing missing data:")
 print(data.isnull().sum())
@@ -61,20 +63,20 @@ plt.show()
 scaler = StandardScaler()
 data_scaled = scaler.fit_transform(data_reduced)
 
-# Calculate the distances to the nearest neighbors
-nbrs = NearestNeighbors(n_neighbors=10).fit(data_scaled)
-distances, indices = nbrs.kneighbors(data_scaled)
-
-# Sort the distances to look for a good eps value
-sorted_distances = np.sort(distances[:, -1], axis=0)
-
-# Plot the sorted distances (this is often used to determine a good eps value for DBSCAN)
-plt.figure(figsize=(10, 6))
-plt.plot(sorted_distances)
-plt.title("Sorted Distances to Nearest Neighbors")
-plt.xlabel("Points")
-plt.ylabel("Distance")
-plt.show()
+# # Calculate the distances to the nearest neighbors
+# nbrs = NearestNeighbors(n_neighbors=10).fit(data_scaled)
+# distances, indices = nbrs.kneighbors(data_scaled)
+#
+# # Sort the distances to look for a good eps value
+# sorted_distances = np.sort(distances[:, -1], axis=0)
+#
+# # Plot the sorted distances (this is often used to determine a good eps value for DBSCAN)
+# plt.figure(figsize=(10, 6))
+# plt.plot(sorted_distances)
+# plt.title("Sorted Distances to Nearest Neighbors")
+# plt.xlabel("Points")
+# plt.ylabel("Distance")
+# plt.show()
 
 # Define a Dunn index calculation function
 def calculate_dunn_index(data, labels):
@@ -225,19 +227,26 @@ data_with_clusters_dbscan = pd.DataFrame(data_without_noise, columns=data_reduce
 data_with_clusters_dbscan['Cluster'] = labels_without_noise
 
 # Plotting histograms for each feature in each DBSCAN cluster
-num_features = len(data_with_clusters_dbscan.columns) - 1  # Exclude the 'Cluster' column
-fig, axes = plt.subplots(num_features, 1, figsize=(8, 2 * num_features))  # Adjust figure height for clarity
+n_cols_db = 2  # Kiek stulpelių histogramų
+num_features_db = len(data_with_clusters_dbscan.columns) - 1  # Exclude 'Cluster' column
+n_rows_db = (num_features_db + n_cols_db - 1) // n_cols_db  # Automatiškai apskaičiuokite eilučių skaičių
+fig, axes = plt.subplots(n_rows_db, n_cols_db, figsize=(15, 5 * n_rows_db), constrained_layout=True)
+axes = axes.flatten()
 
-for i, column in enumerate(data_with_clusters_dbscan.columns[:-1]):  # Exclude the 'Cluster' column
+for i, column in enumerate(data_with_clusters_dbscan.columns[:-1]):  # Išskyrus 'Cluster' stulpelį
     ax = axes[i]
     for cluster in data_with_clusters_dbscan['Cluster'].unique():
         cluster_data = data_with_clusters_dbscan[data_with_clusters_dbscan['Cluster'] == cluster]
-        ax.hist(cluster_data[column], bins=40, alpha=0.5, density=True, label=f"Cluster {cluster}")  # Use density=True
+        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=True, label=f"Cluster {cluster}")
     ax.set_title(f"Distribution of {column} by DBSCAN Cluster")
     ax.set_xlabel(f"{column} Values")
-    ax.set_ylabel("Density")  # Update to reflect density
+    ax.set_ylabel(f"{column}")
     ax.legend(title="Clusters")
-plt.tight_layout()  # Adjust layout
+
+for j in range(i + 1, len(axes)):
+    axes[j].set_visible(False)
+
+plt.suptitle("DBSCAN Cluster Data Distributions", fontsize=16)
 plt.show()
 
 # KMeans Cluster Analysis
@@ -251,17 +260,55 @@ data_with_clusters = pd.DataFrame(data_scaled, columns=data_reduced.columns)
 data_with_clusters['Cluster'] = labels_kmeans
 
 # Plotting histograms for each feature in each cluster
-num_features = len(data_with_clusters.columns) - 1  # Exclude the 'Cluster' column
-fig, axes = plt.subplots(num_features, 1, figsize=(12, 2 * num_features))  # Adjust figure height for clarity
+n_cols_KM = 3  # Kiek stulpelių histogramų
+num_features_KM = len(data_with_clusters.columns) - 1  # Exclude 'Cluster' column
+n_rows_KM = (num_features_KM + n_cols_KM - 1) // n_cols_KM  # Automatiškai apskaičiuokite eilučių skaičių
 
-for i, column in enumerate(data_with_clusters.columns[:-1]):  # Exclude the 'Cluster' column
+# Braižymas KMeans klasteriams
+fig, axes = plt.subplots(n_rows_KM, n_cols_KM, figsize=(15, 5 * n_rows_KM), constrained_layout=True)  # Kvadratinės histogramos
+axes = axes.flatten()  # Paverčiame į vienmačius masyvus iteracijai
+
+for i, column in enumerate(data_with_clusters.columns[:-1]):  # Išskyrus 'Cluster' stulpelį
     ax = axes[i]
     for cluster in data_with_clusters['Cluster'].unique():
         cluster_data = data_with_clusters[data_with_clusters['Cluster'] == cluster]
-        ax.hist(cluster_data[column], bins=40, alpha=0.5, density=True, label=f"Cluster {cluster}")  # Use density=True
+        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=True, label=f"Cluster {cluster}")
     ax.set_title(f"Distribution of {column} by Cluster")
     ax.set_xlabel(f"{column} Values")
-    ax.set_ylabel("Density")  # Update to reflect density
+    ax.set_ylabel(f"{column}")
     ax.legend(title="Clusters")
-plt.tight_layout()  # Adjust layout
+
+# Paslėpti tuščius subplot'us, jei jų yra
+for j in range(i + 1, len(axes)):
+    axes[j].set_visible(False)
+
+plt.suptitle("KMeans Cluster Data Distributions", fontsize=16)
 plt.show()
+
+#Pridėkime pradines klases į duomenis
+original_classes = data_no_dupl['Class']
+label_encoder = LabelEncoder()
+true_labels_encoded = label_encoder.fit_transform(original_classes)
+data_with_clusters['Original_Class'] = true_labels_encoded
+# Konstruojame palyginimo lentelę
+contingency_table = pd.crosstab(data_with_clusters['Cluster'], data_with_clusters['Original_Class'])
+print("Kontingencijos lentelė (Cluster vs Original Class):")
+print(contingency_table)
+# Skaičiuojame Adjusted Rand Index (ARI)
+ari_score = adjusted_rand_score(data_with_clusters['Original_Class'], data_with_clusters['Cluster'])
+print(f"Adjusted Rand Index (ARI): {ari_score:.4f}")
+
+# Skaičiuojame tikslumą ir kitus vertinimus
+true_labels = data_with_clusters['Original_Class']
+predicted_clusters = data_with_clusters['Cluster']
+print("\nKlasifikacijos rezultatai (naudojant klasterius kaip numatymą):")
+print(classification_report(true_labels, predicted_clusters, zero_division=0))
+
+# Grafinis palyginimas
+plt.figure(figsize=(10, 6))
+sns.heatmap(contingency_table, annot=True, fmt="d", cmap="Blues")
+plt.title("Kontingencijos lentelė (Cluster vs Original Class)")
+plt.xlabel("Originalios klasės")
+plt.ylabel("KMeans klasteriai")
+plt.show()
+
