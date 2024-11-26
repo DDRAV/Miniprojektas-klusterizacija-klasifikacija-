@@ -15,7 +15,7 @@ from sklearn.neighbors import NearestNeighbors
 # 1. Get dataset
 #C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv
 #C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv
-path = "C:/Users/ddrav/OneDrive - Everwest/Desktop/Projektas/mok/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
+path = "C:/Users/drawn/Mokymai/DDRAV Mokymai/Miniprojektas/Clusterization/Dry_Bean_Dataset.csv"
 df = pd.read_csv(path)
 
 # 2. Handling data
@@ -27,8 +27,8 @@ data = data_no_dupl.drop(columns=['Class'])
 
 print("Printing missing data:")
 print(data.isnull().sum())
-sns.heatmap(data.isnull(), cbar=False, cmap="viridis")
-plt.show()
+# sns.heatmap(data.isnull(), cbar=False, cmap="viridis")
+# plt.show()
 
 print("Summary statistics of data:")
 for column in data.columns:
@@ -121,10 +121,42 @@ knee_locator = KneeLocator(k_values, wcss, curve="convex", direction="decreasing
 optimal_kmeans = knee_locator.knee
 print(f"Optimal number of clusters detected: {optimal_kmeans}")
 
+# Aglomeratyvios klasterizacijos alkūnės metodo įgyvendinimas
+linkage_method = "ward"  # Galite pasirinkti ir 'complete', 'average' ar 'single'
+wcss_agg = []  # Naudosime panašią logiką kaip K-means atveju
+
+for n_clusters in range(1, 11):  # Klasterių skaičius nuo 1 iki 10
+
+    # Agregavimo klasterizacija su Ward metodu
+    agg_model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage_method)
+    labels = agg_model.fit_predict(data_scaled)
+
+    # Skaičiuojame atstumų sumą kiekviename klasteryje (panašiai kaip WCSS)
+    cluster_distances = 0
+    for cluster_id in np.unique(labels):
+        cluster_points = data_scaled[labels == cluster_id]
+        cluster_center = cluster_points.mean(axis=0)
+        cluster_distances += np.sum((cluster_points - cluster_center) ** 2)
+
+    wcss_agg.append(cluster_distances)
+
+# Braižome alkūnės metodą
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, 11), wcss_agg, marker='o', linestyle='--')
+plt.title("Aglomeratyvios klasterizacijos alkūnės metodas")
+plt.xlabel("Klasterių skaičius")
+plt.ylabel("WCSS")
+plt.show()
+
+# Alkūnės taško nustatymas
+knee_locator_agg = KneeLocator(range(1, 11), wcss_agg, curve="convex", direction="decreasing")
+optimal_agg_clusters = knee_locator_agg.knee
+print(f"Optimalus klasterių skaičius aglomeracijai: {optimal_agg_clusters}")
+
 # Define parameter grids for each method
 kmeans_params = {'n_clusters': range(3, 8)}
-dbscan_params = {'eps': [0.5, 0.7, 0.9], 'min_samples': [5, 10, 20, 40]}
-agg_params = {'n_clusters': range(3, 8), 'linkage': ['ward', 'complete', 'average']}
+dbscan_params = {'eps': [0.7, 0.9], 'min_samples': [5, 10]}
+agg_params = {'n_clusters': range(3, 8), 'linkage': ['ward', 'complete']}
 
 best_params = {}
 
@@ -227,7 +259,7 @@ data_with_clusters_dbscan = pd.DataFrame(data_without_noise, columns=data_reduce
 data_with_clusters_dbscan['Cluster'] = labels_without_noise
 
 # Plotting histograms for each feature in each DBSCAN cluster
-n_cols_db = 2  # Kiek stulpelių histogramų
+n_cols_db = 3  # Kiek stulpelių histogramų
 num_features_db = len(data_with_clusters_dbscan.columns) - 1  # Exclude 'Cluster' column
 n_rows_db = (num_features_db + n_cols_db - 1) // n_cols_db  # Automatiškai apskaičiuokite eilučių skaičių
 fig, axes = plt.subplots(n_rows_db, n_cols_db, figsize=(15, 5 * n_rows_db), constrained_layout=True)
@@ -237,7 +269,7 @@ for i, column in enumerate(data_with_clusters_dbscan.columns[:-1]):  # Išskyrus
     ax = axes[i]
     for cluster in data_with_clusters_dbscan['Cluster'].unique():
         cluster_data = data_with_clusters_dbscan[data_with_clusters_dbscan['Cluster'] == cluster]
-        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=True, label=f"Cluster {cluster}")
+        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=False, label=f"Cluster {cluster}")
     ax.set_title(f"Distribution of {column} by DBSCAN Cluster")
     ax.set_xlabel(f"{column} Values")
     ax.set_ylabel(f"{column}")
@@ -272,7 +304,7 @@ for i, column in enumerate(data_with_clusters.columns[:-1]):  # Išskyrus 'Clust
     ax = axes[i]
     for cluster in data_with_clusters['Cluster'].unique():
         cluster_data = data_with_clusters[data_with_clusters['Cluster'] == cluster]
-        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=True, label=f"Cluster {cluster}")
+        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=False, label=f"Cluster {cluster}")
     ax.set_title(f"Distribution of {column} by Cluster")
     ax.set_xlabel(f"{column} Values")
     ax.set_ylabel(f"{column}")
@@ -283,6 +315,61 @@ for j in range(i + 1, len(axes)):
     axes[j].set_visible(False)
 
 plt.suptitle("KMeans Cluster Data Distributions", fontsize=16)
+plt.show()
+
+
+labels_agg = AgglomerativeClustering(**best_params['Agglomerative']).fit_predict(data_scaled)
+
+# Klasterių dydžių analizė
+agg_cluster_counts = pd.Series(labels_agg).value_counts().sort_index()
+print(f"Agglomerative Cluster Sizes:\n{agg_cluster_counts}")
+
+# Duomenys su klasteriais analizei
+data_with_clusters_agg = pd.DataFrame(data_scaled, columns=data_reduced.columns)
+data_with_clusters_agg['Cluster'] = labels_agg
+
+# Braižymas histogramų kiekvienam hierarchiniam klasteriui
+n_cols_AG = 3  # Kiek stulpelių histogramų
+num_features_AG = len(data_with_clusters_agg.columns) - 1  # Exclude 'Cluster' column
+n_rows_AG = (num_features_AG + n_cols_AG - 1) // n_cols_AG  # Automatiškai apskaičiuokite eilučių skaičių
+
+fig, axes = plt.subplots(n_rows_AG, n_cols_AG, figsize=(15, 5 * n_rows_AG), constrained_layout=True)
+axes = axes.flatten()
+
+for i, column in enumerate(data_with_clusters_agg.columns[:-1]):  # Išskyrus 'Cluster' stulpelį
+    ax = axes[i]
+    for cluster in data_with_clusters_agg['Cluster'].unique():
+        cluster_data = data_with_clusters_agg[data_with_clusters_agg['Cluster'] == cluster]
+        ax.hist(cluster_data[column], bins=20, alpha=0.7, density=False, label=f"Cluster {cluster}")
+    ax.set_title(f"Distribution of {column} by Agglomerative Cluster")
+    ax.set_xlabel(f"{column} Values")
+    ax.set_ylabel(f"{column}")
+    ax.legend(title="Clusters")
+
+for j in range(i + 1, len(axes)):
+    axes[j].set_visible(False)
+
+plt.suptitle("Agglomerative Cluster Data Distributions", fontsize=16)
+plt.show()
+
+
+# Klasterių dydžių palyginimas
+cluster_sizes_comparison = pd.DataFrame({
+    "KMeans": kmeans_cluster_counts,
+    "DBSCAN": dbscan_cluster_counts,
+    "Agglomerative": agg_cluster_counts
+}).fillna(0).astype(int)
+
+print("Cluster Sizes Comparison Across Methods:")
+print(cluster_sizes_comparison)
+
+# Vizualizacija kaip juostinės diagramos
+cluster_sizes_comparison.plot(kind='bar', figsize=(12, 6))
+plt.title("Cluster Sizes Across Methods")
+plt.xlabel("Cluster")
+plt.ylabel("Number of Points")
+plt.xticks(rotation=0)
+plt.legend(title="Method")
 plt.show()
 
 #Pridėkime pradines klases į duomenis
@@ -311,4 +398,3 @@ plt.title("Kontingencijos lentelė (Cluster vs Original Class)")
 plt.xlabel("Originalios klasės")
 plt.ylabel("KMeans klasteriai")
 plt.show()
-
