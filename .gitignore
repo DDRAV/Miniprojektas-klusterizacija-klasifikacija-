@@ -2,3 +2,7 @@
 /.idea
 .env
 /src/__pycache__
+/src
+/test
+/miniProjektas.drawio
+/sql_diagram.drawio
