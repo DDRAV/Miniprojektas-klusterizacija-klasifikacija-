@@ -29,20 +29,29 @@ Explore how clustering can reveal hidden patterns in unlabeled data and how clas
 📂 Project Structure
 
 Miniprojektas-klusterizacija-klasifikacija-/
+
 ├── classification/
+
 │   ├── classification.py (standart classification without major balancing of data)
+
 │   ├── classificationbalans1000.py (classification where training is completed on same amount of entries for every class in this case 1000)
+
 │   ├── classificationbalansmax.py (classification where training is completed on same amount of entries for every class, in this case amount of data equals lowest class entries)
+
 │   ├── submission.csv (submission dataset to split classes)
+
 │   ├── test.csv (testing dataset)
+
 │   ├── train.csv (training dataset)
+
 ├── Clustering/
+
 │   ├── clusterisation.py (clustering model)
+
 │   ├── df_arabica_clean.csv (cleaned datased for clustering)
+
 │   ├── Dry_Bean_Dataset.csv (analyzed dataset)
-│   └── ...
-├── data/                      # Dataset files used for training and clustering
-├── utils/                     # Utility scripts or helper functions
+
 ├── README.txt                 # This file
 
 
